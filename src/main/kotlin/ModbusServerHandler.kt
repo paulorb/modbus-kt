@@ -11,7 +11,8 @@ class ModbusServerHandler: ChannelInboundHandlerAdapter() {
         val modbusPacket: ModbusPacket = msg as ModbusPacket
         when(ModbusPacket.FunctionCode.fromInt(modbusPacket.functionCode.toInt())){
             ModbusPacket.FunctionCode.READ_COIL_STATUS -> {
-
+                val modbusRequest = ModbusReadRequest(modbusPacket)
+                println("address ${modbusRequest.address} number of registers ${modbusRequest.numberOfRegisters}")
             }
             ModbusPacket.FunctionCode.READ_INPUT_STATUS -> TODO()
             ModbusPacket.FunctionCode.READ_HOLDING_REGISTER -> TODO()
