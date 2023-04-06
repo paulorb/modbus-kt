@@ -1,5 +1,6 @@
 import com.sun.media.sound.InvalidFormatException
 import com.sun.org.slf4j.internal.LoggerFactory
+import io.netty.handler.logging.LoggingHandler
 import java.util.logging.Logger
 
 open class ModbusPacket(
@@ -26,15 +27,15 @@ open class ModbusPacket(
         }
     }
 
-
-    companion object {
-        val logger = LoggerFactory.getLogger(ModbusPacket::class.java)
-    }
+    //TODO Fix logging issue
+   // companion object {
+   //     val logger = LoggerFactory.getLogger(ModbusPacket::class.java)
+   // }
 
     override fun isValid() : Boolean {
-        logger.debug("Packet received: trans ind: $transactionIdentifier prot ind: $protocolIdentifier unitID $unitID functionCode $functionCode")
+        //logger.debug("Packet received: trans ind: $transactionIdentifier prot ind: $protocolIdentifier unitID $unitID functionCode $functionCode")
         if(lenght < byteVector.size + 2){
-            logger.error("Malformed packet - Invalid size")
+        //    logger.error("Malformed packet - Invalid size")
             return false
         }
         return true

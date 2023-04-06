@@ -2,13 +2,15 @@ import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.ByteToMessageDecoder
 
+//./modpoll -t4:float -r 100 -c 5 -1 -p 5002  127.0.0.1
 class ModbusPacketDecoder : ByteToMessageDecoder() {
     override fun decode(ctx: ChannelHandlerContext?, `in`: ByteBuf?, out: MutableList<Any>?) {
         if (`in`!!.readableBytes() < 6) {
             return
         }
-        val lenght = `in`.getShort(5)
-        if(`in`.readableBytes() < lenght){
+        val lenght = `in`.getShort(4)
+        println("readable bytes ${`in`!!.readableBytes()} lenght ${lenght}")
+        if(`in`.readableBytes() < lenght - 4){
             return
         }
 
@@ -18,7 +20,7 @@ class ModbusPacketDecoder : ByteToMessageDecoder() {
             `in`.readShort(),
             `in`.readByte(),
             `in`.readByte(),
-            `in`.readBytes(`in`.readableBytes()).array()
+            `in`.toByteArraySafe()
         )
         if(!modbusPacket.isValid()) {
             `in`.release()
@@ -27,5 +29,16 @@ class ModbusPacketDecoder : ByteToMessageDecoder() {
 
         out!!.add(modbusPacket)
     }
+}
+
+fun ByteBuf.toByteArraySafe(): ByteArray {
+    if (this.hasArray()) {
+        return this.array()
+    }
+
+    val bytes = ByteArray(this.readableBytes())
+    this.getBytes(this.readerIndex(), bytes)
+
+    return bytes
 }
 
