@@ -11,14 +11,21 @@ class ModbusPacketDecoder : ByteToMessageDecoder() {
         if(`in`.readableBytes() < lenght){
             return
         }
-        out!!.add(ModbusPacket(
+
+        val modbusPacket = ModbusPacket(
             `in`.readShort(),
             `in`.readShort(),
             `in`.readShort(),
             `in`.readByte(),
             `in`.readByte(),
             `in`.readBytes(`in`.readableBytes()).array()
-        ))
+        )
+        if(!modbusPacket.isValid()) {
+            `in`.release()
+            return
+        }
+
+        out!!.add(modbusPacket)
     }
 }
 
