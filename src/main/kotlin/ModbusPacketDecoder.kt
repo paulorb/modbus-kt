@@ -15,7 +15,7 @@ class ModbusPacketDecoder : ByteToMessageDecoder() {
             return
         }
 
-        val modbusPacket = ModbusPacket(
+        val modbusPacket = GenericModbusPacket(
             `in`.readShort(),
             `in`.readShort(),
             `in`.readShort(),

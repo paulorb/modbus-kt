@@ -27,5 +27,9 @@ class ModbusReadRequest(modbusPacket: ModbusPacket) :
             numberOfRegisters = DataConverter.make_short(byteVector[3], byteVector[2])
         }
 
+    override fun encode() {
+        TODO("Not yet implemented, implement when doing the client, for the server this is not necessary")
+    }
+
 
 }

@@ -12,5 +12,6 @@ class DataConverter {
             bb.put(secondByte);
             return bb.getShort (0);
         }
+
     }
 }
