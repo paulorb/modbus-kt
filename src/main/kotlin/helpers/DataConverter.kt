@@ -15,3 +15,6 @@ class DataConverter {
 
     }
 }
+
+@ExperimentalUnsignedTypes // just to make it clear that the experimental unsigned types are used
+fun ByteArray.toHexString() = asUByteArray().joinToString("") { it.toString(16).padStart(2, '0') }

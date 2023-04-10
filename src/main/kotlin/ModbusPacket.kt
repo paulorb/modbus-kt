@@ -1,6 +1,7 @@
 import ModbusPacket.FunctionCode.Companion.MBAP_HEADER_SIZE_IN_BYTES
 import com.sun.media.sound.InvalidFormatException
 import com.sun.org.slf4j.internal.LoggerFactory
+import helpers.toHexString
 import io.netty.handler.logging.LoggingHandler
 import java.nio.ByteBuffer
 import java.util.logging.Logger
@@ -63,7 +64,11 @@ abstract class ModbusPacket(
             byteBuffer.put(indexPayload,byteVal)
             indexPayload += 1
         }
-
-        return byteBuffer.array()
+        var byteArray = byteBuffer.array()
+        println("TX: ${byteArray.toHexString()}")
+        return byteArray
     }
+
+
 }
+
