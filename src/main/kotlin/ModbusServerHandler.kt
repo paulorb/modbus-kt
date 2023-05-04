@@ -24,7 +24,18 @@ class ModbusServerHandler: ChannelInboundHandlerAdapter() {
                 ctx.write(modbusReadCoilStatusResponse)
             }
             ModbusPacket.FunctionCode.READ_INPUT_STATUS -> TODO()
-            ModbusPacket.FunctionCode.READ_HOLDING_REGISTER -> TODO()
+            ModbusPacket.FunctionCode.READ_HOLDING_REGISTER -> {
+                val modbusRequest = ModbusReadRequest(modbusPacket)
+                println("address ${modbusRequest.address} number of registers ${modbusRequest.numberOfRegisters}")
+                val modbusReadHoldingRegisterResponse = ModbusReadHoldingRegisterResponse()
+                modbusReadHoldingRegisterResponse.unitID = modbusRequest.unitID
+                modbusReadHoldingRegisterResponse.transactionIdentifier = modbusRequest.transactionIdentifier
+                //TODO implement a better way like a callback so the user of this library can set the values as required
+                for(i in 0 until modbusRequest.numberOfRegisters){
+                    modbusReadHoldingRegisterResponse.setRegister(modbusRequest.address + i, 1)
+                }
+                ctx.write(modbusReadHoldingRegisterResponse)
+            }
             ModbusPacket.FunctionCode.READ_INPUT_REGISTER -> TODO()
             ModbusPacket.FunctionCode.FORCE_SINGLE_COIL -> TODO()
             ModbusPacket.FunctionCode.PRESET_SINGLE_REGISTER -> TODO()

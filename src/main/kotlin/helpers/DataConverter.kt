@@ -13,6 +13,10 @@ class DataConverter {
             return bb.getShort (0);
         }
 
+        fun toBytes(s: Short): ByteArray {
+            return byteArrayOf((s.toInt() and 0x00FF).toByte(), ((s.toInt() and 0xFF00) shr (8)).toByte())
+        }
+
     }
 }
 
