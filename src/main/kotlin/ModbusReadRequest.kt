@@ -1,4 +1,3 @@
-import com.sun.media.sound.InvalidFormatException
 import helpers.DataConverter
 
 class ModbusReadRequest(modbusPacket: ModbusPacket) :
@@ -18,10 +17,10 @@ class ModbusReadRequest(modbusPacket: ModbusPacket) :
                 ModbusPacket.FunctionCode.fromInt(functionCode.toInt()) == FunctionCode.READ_INPUT_REGISTER ||
                 ModbusPacket.FunctionCode.fromInt(functionCode.toInt()) == FunctionCode.READ_HOLDING_REGISTER
                 )){
-                throw InvalidFormatException("Unsupported function code received $functionCode")
+                throw Exception("Unsupported function code received $functionCode")
             }
             if(byteVector.size != 4) {
-                throw InvalidFormatException("Expected 4 bytes, found ${byteVector.size} bytes")
+                throw Exception("Expected 4 bytes, found ${byteVector.size} bytes")
             }
             address = DataConverter.make_short(byteVector[1], byteVector[0])
             numberOfRegisters = DataConverter.make_short(byteVector[3], byteVector[2])
