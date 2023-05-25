@@ -9,6 +9,14 @@ import io.netty.handler.codec.ByteToMessageDecoder
 //https://github.com/netty/netty/issues/12360
 class ModbusPacketDecoder : ByteToMessageDecoder() {
     override fun decode(ctx: ChannelHandlerContext?, `in`: ByteBuf?, out: MutableList<Any>?) {
+        val bufferSize = `in`!!.readableBytes()
+        print("\nRX:")
+        for(i in 0 until bufferSize){
+            val st = String.format("%02X", `in`.getByte(i))
+            print(st)
+        }
+        println()
+
         if (`in`!!.readableBytes() < 6) {
             println("less than 6 bytes received, ignoring...")
             return
