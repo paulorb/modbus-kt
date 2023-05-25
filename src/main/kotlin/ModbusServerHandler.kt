@@ -46,6 +46,12 @@ class ModbusServerHandler: ChannelInboundHandlerAdapter() {
       //  ctx.close()
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
+        cause.printStackTrace()
+        ctx.close()
+    }
+
 
     override fun channelReadComplete(ctx: ChannelHandlerContext) {
         ctx.flush()
