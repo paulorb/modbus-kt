@@ -23,7 +23,7 @@ class ModbusForceSingleCoilRequest (modbusPacket: ModbusPacket) :
             throw Exception("Expected 4 bytes, found ${byteVector.size} bytes")
         }
         address = DataConverter.make_short(byteVector[1], byteVector[0])
-        coilStatus = DataConverter.make_short(byteVector[3], byteVector[2]) == 1.toShort();
+        coilStatus =  DataConverter.make_ushort(byteVector[2], byteVector[3]) == 0xff.toUShort();
     }
 
     override fun encode() {
