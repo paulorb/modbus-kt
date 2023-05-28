@@ -12,7 +12,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("io.netty:netty-all:4.1.24.Final")
+    implementation("io.netty:netty-all:4.1.92.Final")
 }
 
 tasks.test {

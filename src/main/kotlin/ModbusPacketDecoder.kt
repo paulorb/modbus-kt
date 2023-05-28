@@ -28,14 +28,15 @@ class ModbusPacketDecoder : ByteToMessageDecoder() {
             println("waiting ${lenght - 4} bytes...")
             return
         }
-
+        val payloadSize = lenght - 2
+        println("payload size: ${payloadSize}")
         val modbusPacket = GenericModbusPacket(
             `in`.readShort(),
             `in`.readShort(),
             `in`.readShort(),
             `in`.readByte(),
             `in`.readByte(),
-            `in`.toByteArraySafe()
+            `in`.toByteArraySafe(payloadSize)
         )
         if(!modbusPacket.isValid()) {
             println("Invalid modbus packet")
@@ -49,14 +50,18 @@ class ModbusPacketDecoder : ByteToMessageDecoder() {
     }
 }
 
-fun ByteBuf.toByteArraySafe(): ByteArray {
-    if (this.hasArray()) {
-        return this.array()
+fun ByteBuf.toByteArraySafe(payloadSize: Int): ByteArray {
+    //if (this.hasArray()) {
+    //    return this.array()
+    //}
+
+    if(payloadSize > this.readableBytes()){
+        throw Exception("Invalid error size on byteBuffer")
     }
 
-    val bytes = ByteArray(this.readableBytes())
+    val bytes = ByteArray(payloadSize)
     this.getBytes(this.readerIndex(), bytes)
-
+    this.readerIndex(this.readerIndex() + payloadSize)
     return bytes
 }
 
