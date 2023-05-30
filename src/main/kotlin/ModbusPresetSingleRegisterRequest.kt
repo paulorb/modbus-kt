@@ -1,6 +1,6 @@
 import helpers.DataConverter
 
-class ModbusForceSingleCoilRequest (modbusPacket: ModbusPacket) :
+class ModbusPresetSingleRegisterRequest  (modbusPacket: ModbusPacket) :
     ModbusPacket(
         modbusPacket.transactionIdentifier,
         modbusPacket.protocolIdentifier,
@@ -10,7 +10,7 @@ class ModbusForceSingleCoilRequest (modbusPacket: ModbusPacket) :
         modbusPacket.byteVector
     ) {
     var address: Int = 0
-    var coilStatus: Boolean = false
+    var singleRegisterValue: Short = 0
     init {
         if(!(ModbusPacket.FunctionCode.fromInt(functionCode.toInt()) == FunctionCode.FORCE_SINGLE_COIL ||
                     ModbusPacket.FunctionCode.fromInt(functionCode.toInt()) == FunctionCode.FORCE_MULTIPLE_COILS ||
@@ -23,7 +23,7 @@ class ModbusForceSingleCoilRequest (modbusPacket: ModbusPacket) :
             throw Exception("Expected 4 bytes, found ${byteVector.size} bytes")
         }
         address = DataConverter.make_ushort(byteVector[1], byteVector[0]).toInt()
-        coilStatus =  DataConverter.make_ushort(byteVector[2], byteVector[3]) == 0xff.toUShort();
+        singleRegisterValue =  DataConverter.make_short(byteVector[2], byteVector[3])
     }
 
     override fun encode() {

@@ -72,11 +72,20 @@ class ModbusServerHandler: ChannelInboundHandlerAdapter() {
                 modusForceSingleCoilResponse.unitID = modbusWriteRequest.unitID
                 //TODO implement a better way like a callback so the user of this library can set the values as required
                 modusForceSingleCoilResponse.transactionIdentifier = modbusWriteRequest.transactionIdentifier
-                modusForceSingleCoilResponse.setAddress(modbusWriteRequest.address)
+                modusForceSingleCoilResponse.setAddress(modbusWriteRequest.address.toShort())
                 modusForceSingleCoilResponse.setCoil(true)
                 ctx.write(modusForceSingleCoilResponse)
             }
-            ModbusPacket.FunctionCode.PRESET_SINGLE_REGISTER -> TODO()
+            ModbusPacket.FunctionCode.PRESET_SINGLE_REGISTER -> {
+                val modbusWriteRequest = ModbusPresetSingleRegisterRequest(modbusPacket)
+                val modbusWritePresetSingleRegisterResponse = ModbusPresetSingleRegisterResponse()
+                modbusWritePresetSingleRegisterResponse.unitID = modbusWriteRequest.unitID
+                //TODO implement a better way like a callback so the user of this library can set the values as required
+                modbusWritePresetSingleRegisterResponse.transactionIdentifier = modbusWriteRequest.transactionIdentifier
+                modbusWritePresetSingleRegisterResponse.setAddress(modbusWriteRequest.address)
+                modbusWritePresetSingleRegisterResponse.setRegisterValue(modbusWriteRequest.singleRegisterValue)
+                ctx.write(modbusWritePresetSingleRegisterResponse)
+            }
             ModbusPacket.FunctionCode.FORCE_MULTIPLE_COILS -> TODO()
             ModbusPacket.FunctionCode.PRESET_MULTIPLE_REGISTER -> TODO()
         }
