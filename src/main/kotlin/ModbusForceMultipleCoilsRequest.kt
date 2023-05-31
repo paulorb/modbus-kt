@@ -41,7 +41,7 @@ class ModbusForceMultipleCoilsRequest(modbusPacket: ModbusPacket) :
                     )){
             throw Exception("Unsupported function code received $functionCode")
         }
-        if(byteVector.size != 4) {
+        if(byteVector.size < 5) {
             throw Exception("Expected 4 bytes, found ${byteVector.size} bytes")
         }
         address = DataConverter.make_ushort(byteVector[1], byteVector[0]).toInt()
