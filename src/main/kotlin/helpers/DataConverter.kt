@@ -13,6 +13,14 @@ class DataConverter {
             return bb.getShort (0);
         }
 
+        fun make_ushort(firstByte: Byte, secondByte: Byte): UShort {
+            var bb = ByteBuffer.allocate(2);
+            bb.order(ByteOrder.LITTLE_ENDIAN);
+            bb.put(firstByte);
+            bb.put(secondByte);
+            return bb.getShort (0).toUShort();
+        }
+
         fun toBytes(s: Short): ByteArray {
             return byteArrayOf((s.toInt() and 0x00FF).toByte(), ((s.toInt() and 0xFF00) shr (8)).toByte())
         }
