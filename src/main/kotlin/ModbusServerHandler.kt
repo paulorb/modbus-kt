@@ -100,7 +100,20 @@ class ModbusServerHandler: ChannelInboundHandlerAdapter() {
                 modbusForceMultipleCoilsResponse.setNumberofCoilsWritten(modbusWriteRequest.numberOfCoilsToWritten.toShort())
                 ctx.write(modbusForceMultipleCoilsResponse)
             }
-            ModbusPacket.FunctionCode.PRESET_MULTIPLE_REGISTER -> TODO()
+            ModbusPacket.FunctionCode.PRESET_MULTIPLE_REGISTER -> {
+                val modbusWriteRequest = ModbusPresetMultipleRegistersRequest(modbusPacket)
+                val modbusPresetMultipleRegistersResponse = ModbusPresetMultipleRegistersResponse()
+                modbusPresetMultipleRegistersResponse.unitID = modbusWriteRequest.unitID
+                //TODO implement a better way like a callback so the user of this library can set the values as required
+                println("received PRESET_MULTIPLE_REGISTER")
+                for(register in modbusWriteRequest.getRegisterList()){
+                    println("address: ${register.first} value: ${register.second}")
+                }
+                modbusPresetMultipleRegistersResponse.transactionIdentifier = modbusWriteRequest.transactionIdentifier
+                modbusPresetMultipleRegistersResponse.setAddress(modbusWriteRequest.address.toShort())
+                modbusPresetMultipleRegistersResponse.setNumberofRegistersWritten(modbusWriteRequest.numberOfRegistersToWritten.toShort())
+                ctx.write(modbusPresetMultipleRegistersResponse)
+            }
         }
 
       //  ctx.close()

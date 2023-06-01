@@ -27,13 +27,13 @@ class ModbusPresetMultipleRegistersResponse : ModbusPacket {
         functionCode = ModbusPacket.FunctionCode.PRESET_MULTIPLE_REGISTER.value.toByte()
         protocolIdentifier = DEFAULT_PROTOCOL_IDENTIFIER.toShort()
         val addressBytes = DataConverter.toBytes(currentAddress)
-        val numberOfBytesWrittenBytes = DataConverter.toBytes((numberOfRegistersWritten.toInt() * 2).toShort() )
+        val numberOfRegistersWrittenBytes = DataConverter.toBytes((numberOfRegistersWritten).toShort() )
 
         byteVector = ByteArray(LEN_BYTES_METADATA_SIZE)
         byteVector[0] = addressBytes[1]
         byteVector[1] = addressBytes[0]
-        byteVector[2] = numberOfBytesWrittenBytes[1]
-        byteVector[3] = numberOfBytesWrittenBytes[0]
+        byteVector[2] = numberOfRegistersWrittenBytes[1]
+        byteVector[3] = numberOfRegistersWrittenBytes[0]
     }
 
     //TODO when implement the client remember to extend this class to also support decoding

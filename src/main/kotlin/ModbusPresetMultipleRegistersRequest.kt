@@ -42,7 +42,7 @@ class ModbusPresetMultipleRegistersRequest (modbusPacket: ModbusPacket) :
         var currentAddress = address
         for(byteIndex in 0 until numberOfDataBytesToFollow step 2){
             val currentShort = DataConverter.make_short(byteVector[5 + byteIndex + 1], byteVector[5 + byteIndex])
-            setRegister(address++, currentShort)
+            setRegister(currentAddress++, currentShort)
         }
     }
 
