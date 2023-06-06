@@ -6,7 +6,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
  * Handler implementation for the echo server.
  */
 @Sharable
-class ModbusServerHandler: ChannelInboundHandlerAdapter() {
+class ModbusServerHandler(modbusServerEventListener: IModbusServerEventListener) : ChannelInboundHandlerAdapter() {
     override fun channelRead(ctx: ChannelHandlerContext, msg: Any?) {
         val modbusPacket: ModbusPacket = msg as ModbusPacket
         when(ModbusPacket.FunctionCode.fromInt(modbusPacket.functionCode.toInt())){
