@@ -1,3 +1,8 @@
+/**
+ * ModbusServerEventListenerReplyAlwaysZero
+ * Setup the server simulator to always return zero to any read command received, for write command
+ * the value will be ignored
+ */
 class ModbusServerEventListenerReplyAlwaysZero: IModbusServerEventListener {
     override fun readCoilStatus(startAddress: Int, numberOfRegisters: Int): List<Boolean> {
         return List(numberOfRegisters) {false}
