@@ -1,5 +1,5 @@
 # Modbus-kt
-modbus client and server implemented in kotlin 
+High performance modbus-tcp client and server implemented in kotlin 
 
 > :warning: **This is a work in progress**: currently only server support is implemented
 
