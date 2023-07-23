@@ -8,7 +8,7 @@ import io.netty.handler.logging.LogLevel
 import io.netty.handler.logging.LoggingHandler
 
 fun main(args: Array<String>) {
-    var modbusServer = ModbusServer(ModbusServerEventListenerReplyAlwaysZero())
+    var modbusServer = ModbusServer(ModbusServerEventListenerReplyRandomNumbers())
     try {
         modbusServer.start()
         modbusServer.block()

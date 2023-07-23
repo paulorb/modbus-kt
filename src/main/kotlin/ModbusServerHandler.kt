@@ -6,7 +6,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
  * Handler implementation for the echo server.
  */
 @Sharable
-class ModbusServerHandler(modbusServerEventListener: IModbusServerEventListener) : ChannelInboundHandlerAdapter() {
+class ModbusServerHandler(private val modbusServerEventListener: IModbusServerEventListener) : ChannelInboundHandlerAdapter() {
     override fun channelRead(ctx: ChannelHandlerContext, msg: Any?) {
         val modbusPacket: ModbusPacket = msg as ModbusPacket
         when(ModbusPacket.FunctionCode.fromInt(modbusPacket.functionCode.toInt())){
@@ -16,10 +16,9 @@ class ModbusServerHandler(modbusServerEventListener: IModbusServerEventListener)
                 val modbusReadCoilStatusResponse = ModbusReadCoilStatusResponse()
                 modbusReadCoilStatusResponse.unitID = modbusRequest.unitID
                 modbusReadCoilStatusResponse.transactionIdentifier = modbusRequest.transactionIdentifier
-                //TODO implement a better way like a callback so the user of this library can set the values as required
-                //for now return as zero
+                var listCoils = modbusServerEventListener.readCoilStatus(modbusRequest.address.toInt(), modbusRequest.numberOfRegisters.toInt())
                 for(i in 0 until modbusRequest.numberOfRegisters){
-                    modbusReadCoilStatusResponse.setCoil(modbusRequest.address + i, false)
+                    modbusReadCoilStatusResponse.setCoil(modbusRequest.address + i, listCoils[i])
                 }
                 ctx.write(modbusReadCoilStatusResponse)
             }
@@ -29,10 +28,9 @@ class ModbusServerHandler(modbusServerEventListener: IModbusServerEventListener)
                 val modbusReadInputStatusResponse = ModbusReadInputStatusResponse()
                 modbusReadInputStatusResponse.unitID = modbusRequest.unitID
                 modbusReadInputStatusResponse.transactionIdentifier = modbusRequest.transactionIdentifier
-                //TODO implement a better way like a callback so the user of this library can set the values as required
-                //for now return as zero
+                var listInputStatus = modbusServerEventListener.readInputStatus(modbusRequest.address.toInt(), modbusRequest.numberOfRegisters.toInt())
                 for(i in 0 until modbusRequest.numberOfRegisters){
-                    modbusReadInputStatusResponse.setDiscreteInput(modbusRequest.address + i, false)
+                    modbusReadInputStatusResponse.setDiscreteInput(modbusRequest.address + i, listInputStatus[i])
                 }
                 ctx.write(modbusReadInputStatusResponse)
             }
@@ -42,9 +40,13 @@ class ModbusServerHandler(modbusServerEventListener: IModbusServerEventListener)
                 val modbusReadHoldingRegisterResponse = ModbusReadHoldingRegisterResponse()
                 modbusReadHoldingRegisterResponse.unitID = modbusRequest.unitID
                 modbusReadHoldingRegisterResponse.transactionIdentifier = modbusRequest.transactionIdentifier
-                //TODO implement a better way like a callback so the user of this library can set the values as required
+                //TODO(there is an issue with holding register)
+                //to replicate try with
+                //modpoll -t4 -r 100 -c 20 -1 -p 5002  127.0.0.1
+                //TODO(the simulator needs to be smart in terms of datatypes, a holding registers form client perspective can be a float32 or word this needs to be part of the ModbusServerEventListener)
+                var listHoldingRegisters = modbusServerEventListener.readHoldingRegister(modbusRequest.address.toInt(), modbusRequest.numberOfRegisters.toInt())
                 for(i in 0 until modbusRequest.numberOfRegisters){
-                    modbusReadHoldingRegisterResponse.setRegister(modbusRequest.address + i, 1)
+                    modbusReadHoldingRegisterResponse.setRegister(modbusRequest.address + i, listHoldingRegisters[i])
                 }
                 ctx.write(modbusReadHoldingRegisterResponse)
             }
@@ -54,15 +56,17 @@ class ModbusServerHandler(modbusServerEventListener: IModbusServerEventListener)
                 val modbusReadInputRegisterResponse = ModbusReadInputRegisterResponse()
                 modbusReadInputRegisterResponse.unitID = modbusRequest.unitID
                 modbusReadInputRegisterResponse.transactionIdentifier = modbusRequest.transactionIdentifier
-                //TODO implement a better way like a callback so the user of this library can set the values as required
+                //TODO(there is an issue with input register)
+                //to replicate try with
+                //modpoll -t3 -r 100 -c 20 -1 -p 5002  127.0.0.1
+                var listInputRegisters = modbusServerEventListener.readInputRegister(modbusRequest.address.toInt(), modbusRequest.numberOfRegisters.toInt())
                 for(i in 0 until modbusRequest.numberOfRegisters){
-                    modbusReadInputRegisterResponse.setRegister(modbusRequest.address + i, 1)
+                    modbusReadInputRegisterResponse.setRegister(modbusRequest.address + i, listInputRegisters[i])
                 }
                 ctx.write(modbusReadInputRegisterResponse)
             }
             ModbusPacket.FunctionCode.FORCE_SINGLE_COIL -> {
                val modbusWriteRequest = ModbusForceSingleCoilRequest(modbusPacket)
-               //TODO
                 if(modbusWriteRequest.coilStatus) {
                     println("address ${modbusWriteRequest.address} status ON")
                 }else{
@@ -70,10 +74,10 @@ class ModbusServerHandler(modbusServerEventListener: IModbusServerEventListener)
                 }
                 val modusForceSingleCoilResponse = ModbusForceSingleCoilResponse()
                 modusForceSingleCoilResponse.unitID = modbusWriteRequest.unitID
-                //TODO implement a better way like a callback so the user of this library can set the values as required
+                modbusServerEventListener.forceSingleCoil(modbusWriteRequest.address, modbusWriteRequest.coilStatus)
                 modusForceSingleCoilResponse.transactionIdentifier = modbusWriteRequest.transactionIdentifier
                 modusForceSingleCoilResponse.setAddress(modbusWriteRequest.address.toShort())
-                modusForceSingleCoilResponse.setCoil(true)
+                modusForceSingleCoilResponse.setCoil(modbusWriteRequest.coilStatus)
                 ctx.write(modusForceSingleCoilResponse)
             }
             ModbusPacket.FunctionCode.PRESET_SINGLE_REGISTER -> {
