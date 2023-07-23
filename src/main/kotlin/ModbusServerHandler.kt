@@ -84,7 +84,7 @@ class ModbusServerHandler(private val modbusServerEventListener: IModbusServerEv
                 val modbusWriteRequest = ModbusPresetSingleRegisterRequest(modbusPacket)
                 val modbusWritePresetSingleRegisterResponse = ModbusPresetSingleRegisterResponse()
                 modbusWritePresetSingleRegisterResponse.unitID = modbusWriteRequest.unitID
-                //TODO implement a better way like a callback so the user of this library can set the values as required
+                modbusServerEventListener.presetSingleRegister(modbusWriteRequest.address, modbusWriteRequest.singleRegisterValue.toInt() == 1)
                 modbusWritePresetSingleRegisterResponse.transactionIdentifier = modbusWriteRequest.transactionIdentifier
                 modbusWritePresetSingleRegisterResponse.setAddress(modbusWriteRequest.address)
                 modbusWritePresetSingleRegisterResponse.setRegisterValue(modbusWriteRequest.singleRegisterValue)
@@ -94,7 +94,7 @@ class ModbusServerHandler(private val modbusServerEventListener: IModbusServerEv
                 val modbusWriteRequest = ModbusForceMultipleCoilsRequest(modbusPacket)
                 val modbusForceMultipleCoilsResponse = ModbusForceMultipleCoilsResponse()
                 modbusForceMultipleCoilsResponse.unitID = modbusWriteRequest.unitID
-                //TODO implement a better way like a callback so the user of this library can set the values as required
+                modbusServerEventListener.forceMultipleCoils(modbusWriteRequest.getCoilList())
                 println("received FORCE_MULTIPLE_COILS")
                 for(coil in modbusWriteRequest.getCoilList()){
                     println("address: ${coil.first} value: ${coil.second}")
@@ -108,7 +108,7 @@ class ModbusServerHandler(private val modbusServerEventListener: IModbusServerEv
                 val modbusWriteRequest = ModbusPresetMultipleRegistersRequest(modbusPacket)
                 val modbusPresetMultipleRegistersResponse = ModbusPresetMultipleRegistersResponse()
                 modbusPresetMultipleRegistersResponse.unitID = modbusWriteRequest.unitID
-                //TODO implement a better way like a callback so the user of this library can set the values as required
+                modbusServerEventListener.presetMultipleRegisters(modbusWriteRequest.getRegisterList())
                 println("received PRESET_MULTIPLE_REGISTER")
                 for(register in modbusWriteRequest.getRegisterList()){
                     println("address: ${register.first} value: ${register.second}")
