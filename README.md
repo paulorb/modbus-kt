@@ -17,7 +17,7 @@ High performance modbus-tcp client and server implemented in kotlin
 
 ## Getting Started
 
-Add the following dependency to your gradle
+Add the following dependency to your gradle (Gradle 4.10 or higher required)
 
 Edit settings.gradle
 
