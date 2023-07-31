@@ -4,7 +4,7 @@ plugins {
     application
 }
 
-group = "org.example"
+group = "org.modbuskt"
 version = "1.0-SNAPSHOT"
 
 repositories {
