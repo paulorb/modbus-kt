@@ -13,3 +13,30 @@ High performance modbus-tcp client and server implemented in kotlin
 * Preset Single Register
 * Force Multiple Coils
 * Preset Multiple Registers
+
+
+## Getting Started
+
+### Add the following dependency to your gradle
+
+Edit settings.gradle
+
+```
+sourceControl {
+    gitRepository("https://github.com/paulorb/modbus-kt.git") {
+        producesModule("org.modbuskt")
+    }
+}
+```
+
+Use the following code to start the server
+```
+var modbusServer = ModbusServer(ModbusServerEventListenerReplyRandomNumbers())
+try {
+    modbusServer.start()
+    modbusServer.block()
+}catch (ex: Exception){
+    modbusServer.stop()
+}
+```
+
