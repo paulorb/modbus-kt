@@ -6,13 +6,14 @@ plugins {
 }
 
 group = "org.modbuskt"
-version = "1.0-SNAPSHOT"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    implementation(kotlin("stdlib-jdk8"))
     testImplementation(kotlin("test"))
     implementation("io.netty:netty-all:4.1.92.Final")
 }
