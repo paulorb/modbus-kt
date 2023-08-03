@@ -1,5 +1,6 @@
-[![](https://jitpack.io/v/paulorb/modbus-kt.svg)](https://jitpack.io/#paulorb/modbus-kt)
 # Modbus-kt
+[![](https://jitpack.io/v/paulorb/modbus-kt.svg)](https://jitpack.io/#paulorb/modbus-kt)
+
 High performance modbus-tcp client and server implemented in kotlin 
 
 > :warning: **This is a work in progress**: currently only server support is implemented
