@@ -18,24 +18,19 @@ High performance modbus-tcp client and server implemented in kotlin
 
 ## Getting Started
 
-Add the following dependency to your gradle (Gradle 4.10 or higher required)
+Add the following dependency to your gradle 
 
-Edit settings.gradle
-
-```
-sourceControl {
-    gitRepository("https://github.com/paulorb/modbus-kt.git") {
-        producesModule("org.modbuskt")
-    }
-}
-```
 
 Edit build.gradle
 ```
-dependencies {
-...
+repositories {
+    maven{
+        url = uri("https://jitpack.io")
+    }
+}
 
-    implementation 'org.modbuskt'
+dependencies {
+    implementation ("com.github.paulorb:modbus-kt:1.0.0")
 }
 ```
 
