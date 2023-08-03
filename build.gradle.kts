@@ -61,7 +61,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "com.paulorb"
             artifactId = "modbus-kt"
-            version = "0.0.99"
+            version = "1.0.0"
             from(components["java"])
         }
     }
