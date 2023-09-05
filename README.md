@@ -1,5 +1,10 @@
 # Modbus-kt
 [![](https://jitpack.io/v/paulorb/modbus-kt.svg)](https://jitpack.io/#paulorb/modbus-kt)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=paulorb_modbus-kt&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=paulorb_modbus-kt)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=paulorb_modbus-kt&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=paulorb_modbus-kt)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=paulorb_modbus-kt&metric=bugs)](https://sonarcloud.io/summary/new_code?id=paulorb_modbus-kt)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=paulorb_modbus-kt&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=paulorb_modbus-kt)
+
 
 High performance modbus-tcp client and server implemented in kotlin 
 
