@@ -13,6 +13,7 @@ fun main(args: Array<String>) {
         modbusServer.start()
         modbusServer.block()
     }catch (ex: Exception){
+        println("modbus server terminated")
         modbusServer.stop()
     }
 //    // Configure the server.
