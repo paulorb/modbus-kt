@@ -47,12 +47,11 @@ class ModbusForceMultipleCoilsRequest(modbusPacket: ModbusPacket) :
         address = DataConverter.make_ushort(byteVector[1], byteVector[0]).toInt()
         numberOfCoilsToWritten = DataConverter.make_ushort(byteVector[3], byteVector[2]).toInt()
         numberOfDataBytesToFollow =  byteVector[4].toInt()
-        coilCount = address
         for(byteIndex in 0 until numberOfDataBytesToFollow){
             val currentByte = byteVector[5 + byteIndex]
             for(currentBit in 0 until 7) {
                 if(coilCount < numberOfCoilsToWritten){
-                    setCoil(coilCount, getBit(currentByte, currentBit) )
+                    setCoil(coilCount + address, getBit(currentByte, currentBit) )
                     coilCount++;
                 }
             }
