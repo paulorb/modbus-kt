@@ -3,6 +3,75 @@ import kotlin.test.assertEquals
 internal class ModbusReadCoilStatusResponseTest {
 
     @Test
+    fun read37CoilsMixed() {
+        //CD: Coils 27 - 20 (1100 1101)
+        //6B: Coils 35 - 28 (0110 1011)
+        //B2: Coils 43 - 36 (1011 0010)
+        //0E: Coils 51 - 44 (0000 1110)
+        //1B: 3 space holders & Coils 56 - 52 (0001 1011)
+        var response = ModbusReadCoilStatusResponse()
+        response.setCoil(20, true)
+        response.setCoil(21, false)
+        response.setCoil(22, true)
+        response.setCoil(23, true)
+        response.setCoil(24, false)
+        response.setCoil(25, false)
+        response.setCoil(26, true)
+        response.setCoil(27, true)
+
+        response.setCoil(28, true)
+        response.setCoil(29, true)
+        response.setCoil(30, false)
+        response.setCoil(31, true)
+        response.setCoil(32, false)
+        response.setCoil(33, true)
+        response.setCoil(34, true)
+        response.setCoil(35, false)
+
+        response.setCoil(36, false)
+        response.setCoil(37, true)
+        response.setCoil(38, false)
+        response.setCoil(39, false)
+        response.setCoil(40, true)
+        response.setCoil(41, true)
+        response.setCoil(42, false)
+        response.setCoil(43, true)
+
+        response.setCoil(44, false)
+        response.setCoil(45, true)
+        response.setCoil(46, true)
+        response.setCoil(47, true)
+        response.setCoil(48, false)
+        response.setCoil(49, false)
+        response.setCoil(50, false)
+        response.setCoil(51, false)
+
+        response.setCoil(52, true)
+        response.setCoil(53, true)
+        response.setCoil(54, false)
+        response.setCoil(55, true)
+        response.setCoil(56, true)
+
+        response.transactionIdentifier = 1
+        var buffer = response.toProto()
+        assertEquals(14, buffer.size)
+        assertEquals(0, buffer[0])  // Transaction ID
+        assertEquals(1, buffer[1])  // Transaction ID
+        assertEquals(0, buffer[2])  // Protocol Identifier
+        assertEquals(0, buffer[3])  // Protocol Identifier
+        assertEquals(0, buffer[4])  // Message length
+        assertEquals(8, buffer[5])  // Message length
+        assertEquals(0, buffer[6])  // Unit identifier
+        assertEquals(1, buffer[7])  // Function code
+        assertEquals(5, buffer[8])  // Number of bytes to follow
+        assertEquals(0xCD, buffer[9].toUByte().toInt())
+        assertEquals(0x6B, buffer[10].toUByte().toInt())
+        assertEquals(0xB2, buffer[11].toUByte().toInt())
+        assertEquals(0x0E, buffer[12].toUByte().toInt())
+        assertEquals(0x1B, buffer[13].toUByte().toInt())
+    }
+
+    @Test
     fun read8CoilsAllTrue() {
         var response = ModbusReadCoilStatusResponse()
         response.setCoil(0, true)
@@ -156,7 +225,7 @@ internal class ModbusReadCoilStatusResponseTest {
         assertEquals(0, buffer[6])  // Unit identifier
         assertEquals(1, buffer[7])  // Function code
         assertEquals(1, buffer[8])  // Number of bytes to follow
-        assertEquals(0x7, buffer[9].toUByte().toInt())  // Number of bytes to follow
+        assertEquals(7, buffer[9].toUByte().toInt())  // Number of bytes to follow
     }
 
 

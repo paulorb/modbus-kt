@@ -6,6 +6,7 @@ class ModbusServerEventListenerReplyRandomNumbers : IModbusServerEventListener {
         val mutableList = mutableListOf<Boolean>()
         for(i in 0..numberOfRegisters)
             mutableList.add(Random.nextBoolean())
+        println(mutableList.toString())
         return mutableList
     }
 
@@ -13,6 +14,7 @@ class ModbusServerEventListenerReplyRandomNumbers : IModbusServerEventListener {
         val mutableList = mutableListOf<Short>()
         for(i in 0..numberOfRegisters)
             mutableList.add(Random.nextInt(Short.MAX_VALUE.toInt()).toShort())
+        println(mutableList.toString())
         return mutableList
     }
 

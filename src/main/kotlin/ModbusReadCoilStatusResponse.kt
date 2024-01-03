@@ -28,6 +28,7 @@ class ModbusReadCoilStatusResponse: ModbusPacket {
     }
 
     fun setCoil(bitIndex: Int, value: Boolean){
+        println("setCoil index=$bitIndex value=$value")
         listIndexToCoilValue.add(Pair<Int, Boolean>(bitIndex, value))
     }
 
@@ -66,12 +67,12 @@ class ModbusReadCoilStatusResponse: ModbusPacket {
         byteVector[0] = length
         for(element in listIndexToCoilValue){
             if(element.second) {
-                println("index ${(element.first / 8) + 1 - minIndex} bit index ${element.first % 8}")
+                println("byte index ${((element.first - minIndex)/8)+ 1} bit index ${(element.first - minIndex) % 8}")
                 byteVector[((element.first - minIndex)/8)+ 1] =
-                    setBit(byteVector[((element.first - minIndex)/8)+ 1], element.first % 8)
+                    setBit(byteVector[((element.first - minIndex)/8)+ 1], (element.first - minIndex)% 8)
             }
         }
-    }
+   }
 
     //TODO when implement the client remember to extend this class to also support decoding
 }

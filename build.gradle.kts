@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.8.20"
+    kotlin("jvm") version "1.9.0"
     id("org.jetbrains.dokka") version "1.8.20"
     application
     `maven-publish`
@@ -15,7 +15,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     testImplementation(kotlin("test"))
-    implementation("io.netty:netty-all:4.1.92.Final")
+    implementation("io.netty:netty-all:4.1.104.Final")
 }
 
 tasks.test {
@@ -23,7 +23,7 @@ tasks.test {
 }
 
 kotlin {
-    jvmToolchain(11)
+    jvmToolchain(17)
 }
 
 application {
@@ -33,10 +33,10 @@ application {
 
 tasks {
     compileKotlin {
-        kotlinOptions.jvmTarget = "11"
+        kotlinOptions.jvmTarget = "17"
     }
     compileTestKotlin {
-        kotlinOptions.jvmTarget = "11"
+        kotlinOptions.jvmTarget = "17"
     }
 }
 
