@@ -43,11 +43,12 @@ class ModbusReadHoldingRegisterResponse: ModbusPacket{
         println("modbus length $length")
         byteVector = ByteArray(LEN_BYTES_METADATA_SIZE + length )
         byteVector[0] = length
+        var i = 1
         for(element in listIndexToRegisterValue){
-                println("byte[${(element.first - minIndex)+ 1}]=${DataConverter.toBytes(element.second)[0]}")
-                println("byte[${(element.first - minIndex)+ 2}]=${DataConverter.toBytes(element.second)[1]}")
-                byteVector[(element.first - minIndex)+ 1] = DataConverter.toBytes(element.second)[0]
-                byteVector[(element.first - minIndex)+ 2] = DataConverter.toBytes(element.second)[1]
+                println("byte[${i}]=${DataConverter.toBytes(element.second)[0]}")
+                byteVector[i++] = DataConverter.toBytes(element.second)[0]
+                println("byte[${i}]=${DataConverter.toBytes(element.second)[1]}")
+                byteVector[i++] = DataConverter.toBytes(element.second)[1]
         }
     }
 
