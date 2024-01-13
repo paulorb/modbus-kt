@@ -7,15 +7,15 @@ import io.netty.channel.socket.nio.NioServerSocketChannel
 import io.netty.handler.logging.LogLevel
 import io.netty.handler.logging.LoggingHandler
 
-fun main(args: Array<String>) {
-    var modbusServer = ModbusServer(ModbusServerEventListenerReplyRandomNumbers())
-    try {
-        modbusServer.start()
-        modbusServer.block()
-    }catch (ex: Exception){
-        println("modbus server terminated")
-        modbusServer.stop()
-    }
+//fun main(args: Array<String>) {
+//    var modbusServer = ModbusServer(ModbusServerEventListenerReplyRandomNumbers())
+//    try {
+//        modbusServer.start()
+//        modbusServer.block()
+//    }catch (ex: Exception){
+//        println("modbus server terminated")
+//        modbusServer.stop()
+//    }
 //    // Configure the server.
 //    val bossGroup: EventLoopGroup = NioEventLoopGroup(1)
 //    val workerGroup: EventLoopGroup = NioEventLoopGroup()
@@ -39,4 +39,4 @@ fun main(args: Array<String>) {
 //        bossGroup.shutdownGracefully()
 //        workerGroup.shutdownGracefully()
 //    }
-}
+//}
