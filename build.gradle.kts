@@ -26,9 +26,9 @@ kotlin {
     jvmToolchain(11)
 }
 
-application {
-    mainClass.set("MainKt")
-}
+//application {
+//    mainClass.set("MainKt")
+//}
 
 
 tasks {
