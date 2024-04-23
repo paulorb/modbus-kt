@@ -61,10 +61,10 @@ class ModbusReadCoilStatusResponse: ModbusPacket {
         }
         println("min $minIndex max $maxIndex")
         val numberOfBytes = ((maxIndex.toInt() - minIndex.toInt() + 1)/8) + extraByte((maxIndex.toInt() - minIndex.toInt() + 1))
-        val length = max(numberOfBytes, 1).toByte()
+        val length = max(numberOfBytes, 1).toUByte()
         println("modbus length $length")
-        byteVector = ByteArray(LEN_BYTES_METADATA_SIZE + length )
-        byteVector[0] = length
+        byteVector = ByteArray(LEN_BYTES_METADATA_SIZE + length.toInt() )
+        byteVector[0] = length.toByte()
         for(element in listIndexToCoilValue){
             if(element.second) {
                 println("byte index ${((element.first - minIndex)/8)+ 1} bit index ${(element.first - minIndex) % 8}")

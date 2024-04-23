@@ -39,10 +39,10 @@ class ModbusReadHoldingRegisterResponse: ModbusPacket{
         }
 
         val numberOfBytes = (maxIndex.toInt() - minIndex.toInt() + 1) * 2
-        val length = max(numberOfBytes, 1).toByte()
+        val length = max(numberOfBytes, 1).toUByte()
         println("modbus length $length")
-        byteVector = ByteArray(LEN_BYTES_METADATA_SIZE + length )
-        byteVector[0] = length
+        byteVector = ByteArray(LEN_BYTES_METADATA_SIZE + length.toInt() )
+        byteVector[0] = length.toByte()
         var i = 1
         for(element in listIndexToRegisterValue){
                 println("byte[${i}]=${DataConverter.toBytes(element.second)[1]}")
