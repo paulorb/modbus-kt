@@ -19,11 +19,12 @@ class ModbusPacketDecoder : ByteToMessageDecoder() {
 
     override fun decode(ctx: ChannelHandlerContext?, `in`: ByteBuf?, out: MutableList<Any>?) {
         val bufferSize = `in`!!.readableBytes()
-        print("\nRX:")
+        var stringLog = "RX: "
         for(i in 0 until bufferSize){
             val st = String.format("%02X", `in`.getByte(i))
-            print(st)
+            stringLog = stringLog.plus(st)
         }
+        logger.info(stringLog)
 
         if (`in`!!.readableBytes() < 6) {
             logger.debug("less than 6 bytes received, ignoring...")
