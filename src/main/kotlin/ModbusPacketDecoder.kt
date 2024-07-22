@@ -1,6 +1,7 @@
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.ByteToMessageDecoder
+import org.slf4j.LoggerFactory
 
 //./modpoll -t0 -r 100 -c 5 -1 -p 5002  127.0.0.1
 //./modpoll -t1 -r 100 -c 5 -1 -p 5002  127.0.0.1
@@ -10,6 +11,12 @@ import io.netty.handler.codec.ByteToMessageDecoder
 // Don't release ByteBuf, ByteToMessageDecoder handles it internally
 //https://github.com/netty/netty/issues/12360
 class ModbusPacketDecoder : ByteToMessageDecoder() {
+
+    companion object {
+        val logger = LoggerFactory.getLogger("ModbusPacketDecoder")
+    }
+
+
     override fun decode(ctx: ChannelHandlerContext?, `in`: ByteBuf?, out: MutableList<Any>?) {
         val bufferSize = `in`!!.readableBytes()
         print("\nRX:")
@@ -17,21 +24,20 @@ class ModbusPacketDecoder : ByteToMessageDecoder() {
             val st = String.format("%02X", `in`.getByte(i))
             print(st)
         }
-        println()
 
         if (`in`!!.readableBytes() < 6) {
-            println("less than 6 bytes received, ignoring...")
+            logger.debug("less than 6 bytes received, ignoring...")
             return
         }
-        println("more than 6 bytes received...")
+        logger.debug("more than 6 bytes received...")
         val lenght = `in`.getShort(4)
-        println("readable bytes ${`in`!!.readableBytes()} lenght ${lenght}")
+        logger.debug("readable bytes ${`in`!!.readableBytes()} lenght ${lenght}")
         if(`in`.readableBytes() < lenght - 4){
-            println("waiting ${lenght - 4} bytes...")
+            logger.debug("waiting ${lenght - 4} bytes...")
             return
         }
         val payloadSize = lenght - 2
-        println("payload size: ${payloadSize}")
+        logger.debug("payload size: ${payloadSize}")
         val modbusPacket = GenericModbusPacket(
             `in`.readShort(),
             `in`.readShort(),
@@ -41,10 +47,10 @@ class ModbusPacketDecoder : ByteToMessageDecoder() {
             `in`.toByteArraySafe(payloadSize)
         )
         if(!modbusPacket.isValid()) {
-            println("Invalid modbus packet")
+            logger.error("Invalid modbus packet")
             return
         }else{
-            println("Valid modbus packet =)")
+            logger.debug("Valid modbus packet =)")
             out!!.add(modbusPacket)
         }
 

@@ -12,10 +12,15 @@ repositories {
     mavenCentral()
 }
 
+val log4jVersion = "2.12.1"
+
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     testImplementation(kotlin("test"))
     implementation("io.netty:netty-all:4.1.104.Final")
+    implementation("org.apache.logging.log4j:log4j-core:$log4jVersion")
+    implementation("org.apache.logging.log4j:log4j-api:$log4jVersion")
+    implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion")
 }
 
 tasks.test {

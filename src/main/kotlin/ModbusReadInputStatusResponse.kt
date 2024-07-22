@@ -1,4 +1,5 @@
 import ModbusPacket.FunctionCode.Companion.DEFAULT_PROTOCOL_IDENTIFIER
+import org.slf4j.LoggerFactory
 import kotlin.experimental.or
 import kotlin.math.max
 
@@ -14,6 +15,7 @@ class ModbusReadInputStatusResponse : ModbusPacket {
 
     companion object {
         const val LEN_BYTES_METADATA_SIZE = 1
+        val logger = LoggerFactory.getLogger("ModbusReadInputStatusResponse")
     }
 
     private var listIndexToCoilValue = mutableListOf<Pair<Int,Boolean>>()
@@ -58,15 +60,15 @@ class ModbusReadInputStatusResponse : ModbusPacket {
                 minIndex = element.first
             }
         }
-        println("min $minIndex max $maxIndex")
+        logger.debug("min $minIndex max $maxIndex")
         val numberOfBytes = ((maxIndex.toInt() - minIndex.toInt() + 1)/8) + extraByte((maxIndex.toInt() - minIndex.toInt() + 1))
         val length = max(numberOfBytes, 1).toByte()
-        println("modbus length $length")
+        logger.debug("modbus length $length")
         byteVector = ByteArray(LEN_BYTES_METADATA_SIZE + length )
         byteVector[0] = length
         for(element in listIndexToCoilValue){
             if(element.second) {
-                println("index ${(element.first / 8) + 1 - minIndex} bit index ${element.first % 8}")
+                logger.debug("index ${(element.first / 8) + 1 - minIndex} bit index ${element.first % 8}")
                 byteVector[((element.first - minIndex)/8)+ 1] =
                     setBit(byteVector[((element.first - minIndex)/8)+ 1], element.first % 8)
             }

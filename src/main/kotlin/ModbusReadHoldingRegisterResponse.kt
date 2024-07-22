@@ -1,5 +1,6 @@
 import ModbusPacket.FunctionCode.Companion.DEFAULT_PROTOCOL_IDENTIFIER
 import helpers.DataConverter
+import org.slf4j.LoggerFactory
 import java.net.Inet4Address
 import kotlin.math.max
 
@@ -15,7 +16,9 @@ class ModbusReadHoldingRegisterResponse: ModbusPacket{
 
     companion object {
         const val LEN_BYTES_METADATA_SIZE = 1
+        val logger = LoggerFactory.getLogger("ModbusReadHoldingRegisterResponse")
     }
+
 
     private var listIndexToRegisterValue = mutableListOf<Pair<Int,Short>>()
 
@@ -40,14 +43,14 @@ class ModbusReadHoldingRegisterResponse: ModbusPacket{
 
         val numberOfBytes = (maxIndex.toInt() - minIndex.toInt() + 1) * 2
         val length = max(numberOfBytes, 1).toUByte()
-        println("modbus length $length")
+        logger.debug("modbus length $length")
         byteVector = ByteArray(LEN_BYTES_METADATA_SIZE + length.toInt() )
         byteVector[0] = length.toByte()
         var i = 1
         for(element in listIndexToRegisterValue){
-                println("byte[${i}]=${DataConverter.toBytes(element.second)[1]}")
+                logger.debug("byte[${i}]=${DataConverter.toBytes(element.second)[1]}")
                 byteVector[i++] = DataConverter.toBytes(element.second)[1]
-                println("byte[${i}]=${DataConverter.toBytes(element.second)[0]}")
+                logger.debug("byte[${i}]=${DataConverter.toBytes(element.second)[0]}")
                 byteVector[i++] = DataConverter.toBytes(element.second)[0]
         }
     }

@@ -1,4 +1,5 @@
 import ModbusPacket.FunctionCode.Companion.DEFAULT_PROTOCOL_IDENTIFIER
+import org.slf4j.LoggerFactory
 import kotlin.experimental.or
 import kotlin.math.max
 
@@ -14,6 +15,7 @@ class ModbusReadCoilStatusResponse: ModbusPacket {
 
     companion object {
         const val LEN_BYTES_METADATA_SIZE = 1
+        val logger = LoggerFactory.getLogger("ModbusReadCoilStatusResponse")
     }
 
     private var listIndexToCoilValue = mutableListOf<Pair<Int,Boolean>>()
@@ -28,7 +30,7 @@ class ModbusReadCoilStatusResponse: ModbusPacket {
     }
 
     fun setCoil(bitIndex: Int, value: Boolean){
-        println("setCoil index=$bitIndex value=$value")
+        logger.debug("setCoil index=$bitIndex value=$value")
         listIndexToCoilValue.add(Pair<Int, Boolean>(bitIndex, value))
     }
 
@@ -59,15 +61,15 @@ class ModbusReadCoilStatusResponse: ModbusPacket {
                 minIndex = element.first
             }
         }
-        println("min $minIndex max $maxIndex")
+        logger.debug("min $minIndex max $maxIndex")
         val numberOfBytes = ((maxIndex.toInt() - minIndex.toInt() + 1)/8) + extraByte((maxIndex.toInt() - minIndex.toInt() + 1))
         val length = max(numberOfBytes, 1).toUByte()
-        println("modbus length $length")
+        logger.debug("modbus length $length")
         byteVector = ByteArray(LEN_BYTES_METADATA_SIZE + length.toInt() )
         byteVector[0] = length.toByte()
         for(element in listIndexToCoilValue){
             if(element.second) {
-                println("byte index ${((element.first - minIndex)/8)+ 1} bit index ${(element.first - minIndex) % 8}")
+                logger.debug("byte index ${((element.first - minIndex)/8)+ 1} bit index ${(element.first - minIndex) % 8}")
                 byteVector[((element.first - minIndex)/8)+ 1] =
                     setBit(byteVector[((element.first - minIndex)/8)+ 1], (element.first - minIndex)% 8)
             }

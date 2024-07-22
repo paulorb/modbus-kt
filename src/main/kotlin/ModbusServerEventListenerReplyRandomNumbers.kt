@@ -1,12 +1,17 @@
+import org.slf4j.LoggerFactory
 import kotlin.random.Random
 
 class ModbusServerEventListenerReplyRandomNumbers : IModbusServerEventListener {
+
+    companion object {
+        val logger = LoggerFactory.getLogger("ModbusServerEventListenerReplyRandomNumbers")
+    }
 
     private fun generateRandomLogicList(numberOfRegisters: Int):  List<Boolean> {
         val mutableList = mutableListOf<Boolean>()
         for(i in 0..numberOfRegisters)
             mutableList.add(Random.nextBoolean())
-        println(mutableList.toString())
+        logger.debug(mutableList.toString())
         return mutableList
     }
 
@@ -14,7 +19,7 @@ class ModbusServerEventListenerReplyRandomNumbers : IModbusServerEventListener {
         val mutableList = mutableListOf<Short>()
         for(i in 0..numberOfRegisters)
             mutableList.add(Random.nextInt(Short.MAX_VALUE.toInt()).toShort())
-        println(mutableList.toString())
+        logger.debug(mutableList.toString())
         return mutableList
     }
 
