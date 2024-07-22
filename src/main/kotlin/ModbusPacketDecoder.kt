@@ -24,7 +24,6 @@ class ModbusPacketDecoder : ByteToMessageDecoder() {
             val st = String.format("%02X", `in`.getByte(i))
             print(st)
         }
-        println()
 
         if (`in`!!.readableBytes() < 6) {
             logger.debug("less than 6 bytes received, ignoring...")
