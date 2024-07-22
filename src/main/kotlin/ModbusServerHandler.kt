@@ -1,18 +1,24 @@
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import org.slf4j.LoggerFactory
 
 /**
  * Handler implementation for the echo server.
  */
 @Sharable
 class ModbusServerHandler(private val modbusServerEventListener: IModbusServerEventListener) : ChannelInboundHandlerAdapter() {
+
+    companion object {
+        val logger = LoggerFactory.getLogger("ModbusServerHandler")
+    }
+
     override fun channelRead(ctx: ChannelHandlerContext, msg: Any?) {
         val modbusPacket: ModbusPacket = msg as ModbusPacket
         when(ModbusPacket.FunctionCode.fromInt(modbusPacket.functionCode.toInt())){
             ModbusPacket.FunctionCode.READ_COIL_STATUS -> {
                 val modbusRequest = ModbusReadRequest(modbusPacket)
-                println("address ${modbusRequest.address} number of registers ${modbusRequest.numberOfRegisters}")
+                logger.debug("address ${modbusRequest.address} number of registers ${modbusRequest.numberOfRegisters}")
                 val modbusReadCoilStatusResponse = ModbusReadCoilStatusResponse()
                 modbusReadCoilStatusResponse.unitID = modbusRequest.unitID
                 modbusReadCoilStatusResponse.transactionIdentifier = modbusRequest.transactionIdentifier
@@ -24,7 +30,7 @@ class ModbusServerHandler(private val modbusServerEventListener: IModbusServerEv
             }
             ModbusPacket.FunctionCode.READ_INPUT_STATUS -> {
                 val modbusRequest = ModbusReadRequest(modbusPacket)
-                println("address ${modbusRequest.address} number of registers ${modbusRequest.numberOfRegisters}")
+                logger.debug("address ${modbusRequest.address} number of registers ${modbusRequest.numberOfRegisters}")
                 val modbusReadInputStatusResponse = ModbusReadInputStatusResponse()
                 modbusReadInputStatusResponse.unitID = modbusRequest.unitID
                 modbusReadInputStatusResponse.transactionIdentifier = modbusRequest.transactionIdentifier
@@ -36,7 +42,7 @@ class ModbusServerHandler(private val modbusServerEventListener: IModbusServerEv
             }
             ModbusPacket.FunctionCode.READ_HOLDING_REGISTER -> {
                 val modbusRequest = ModbusReadRequest(modbusPacket)
-                println("address ${modbusRequest.address} number of registers ${modbusRequest.numberOfRegisters}")
+                logger.debug("address ${modbusRequest.address} number of registers ${modbusRequest.numberOfRegisters}")
                 val modbusReadHoldingRegisterResponse = ModbusReadHoldingRegisterResponse()
                 modbusReadHoldingRegisterResponse.unitID = modbusRequest.unitID
                 modbusReadHoldingRegisterResponse.transactionIdentifier = modbusRequest.transactionIdentifier
@@ -52,7 +58,7 @@ class ModbusServerHandler(private val modbusServerEventListener: IModbusServerEv
             }
             ModbusPacket.FunctionCode.READ_INPUT_REGISTER -> {
                 val modbusRequest = ModbusReadRequest(modbusPacket)
-                println("address ${modbusRequest.address} number of registers ${modbusRequest.numberOfRegisters}")
+                logger.debug("address ${modbusRequest.address} number of registers ${modbusRequest.numberOfRegisters}")
                 val modbusReadInputRegisterResponse = ModbusReadInputRegisterResponse()
                 modbusReadInputRegisterResponse.unitID = modbusRequest.unitID
                 modbusReadInputRegisterResponse.transactionIdentifier = modbusRequest.transactionIdentifier
@@ -68,9 +74,9 @@ class ModbusServerHandler(private val modbusServerEventListener: IModbusServerEv
             ModbusPacket.FunctionCode.FORCE_SINGLE_COIL -> {
                val modbusWriteRequest = ModbusForceSingleCoilRequest(modbusPacket)
                 if(modbusWriteRequest.coilStatus) {
-                    println("address ${modbusWriteRequest.address} status ON")
+                    logger.debug("address ${modbusWriteRequest.address} status ON")
                 }else{
-                    println("address ${modbusWriteRequest.address} status OFF")
+                    logger.debug("address ${modbusWriteRequest.address} status OFF")
                 }
                 val modusForceSingleCoilResponse = ModbusForceSingleCoilResponse()
                 modusForceSingleCoilResponse.unitID = modbusWriteRequest.unitID
@@ -95,9 +101,9 @@ class ModbusServerHandler(private val modbusServerEventListener: IModbusServerEv
                 val modbusForceMultipleCoilsResponse = ModbusForceMultipleCoilsResponse()
                 modbusForceMultipleCoilsResponse.unitID = modbusWriteRequest.unitID
                 modbusServerEventListener.forceMultipleCoils(modbusWriteRequest.getCoilList())
-                println("received FORCE_MULTIPLE_COILS")
+                logger.debug("received FORCE_MULTIPLE_COILS")
                 for(coil in modbusWriteRequest.getCoilList()){
-                    println("address: ${coil.first} value: ${coil.second}")
+                    logger.debug("address: ${coil.first} value: ${coil.second}")
                 }
                 modbusForceMultipleCoilsResponse.transactionIdentifier = modbusWriteRequest.transactionIdentifier
                 modbusForceMultipleCoilsResponse.setAddress(modbusWriteRequest.address.toShort())
@@ -109,9 +115,9 @@ class ModbusServerHandler(private val modbusServerEventListener: IModbusServerEv
                 val modbusPresetMultipleRegistersResponse = ModbusPresetMultipleRegistersResponse()
                 modbusPresetMultipleRegistersResponse.unitID = modbusWriteRequest.unitID
                 modbusServerEventListener.presetMultipleRegisters(modbusWriteRequest.getRegisterList())
-                println("received PRESET_MULTIPLE_REGISTER")
+                logger.debug("received PRESET_MULTIPLE_REGISTER")
                 for(register in modbusWriteRequest.getRegisterList()){
-                    println("address: ${register.first} value: ${register.second}")
+                    logger.debug("address: ${register.first} value: ${register.second}")
                 }
                 modbusPresetMultipleRegistersResponse.transactionIdentifier = modbusWriteRequest.transactionIdentifier
                 modbusPresetMultipleRegistersResponse.setAddress(modbusWriteRequest.address.toShort())

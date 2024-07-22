@@ -1,5 +1,6 @@
 import ModbusPacket.FunctionCode.Companion.MBAP_HEADER_SIZE_IN_BYTES
 import helpers.toHexString
+import org.slf4j.LoggerFactory
 import java.nio.ByteBuffer
 
 abstract class ModbusPacket(
@@ -11,7 +12,9 @@ abstract class ModbusPacket(
     var byteVector: ByteArray
     )  : IPacket {
 
-
+    companion object {
+        val logger = LoggerFactory.getLogger("ModbusPacket")
+    }
 
     enum class FunctionCode(val value: Int) {
         READ_COIL_STATUS(0x01),
@@ -61,7 +64,7 @@ abstract class ModbusPacket(
             indexPayload += 1
         }
         var byteArray = byteBuffer.array()
-        println("TX: ${byteArray.toHexString()}")
+        logger.info("TX: ${byteArray.toHexString()}")
         return byteArray
     }
 

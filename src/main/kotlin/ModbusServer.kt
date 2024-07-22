@@ -6,6 +6,7 @@ import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.nio.NioServerSocketChannel
 import io.netty.handler.logging.LogLevel
 import io.netty.handler.logging.LoggingHandler
+import org.apache.logging.log4j.core.config.Configurator
 
 class ModbusServer(modbusServerEventListener: IModbusServerEventListener) {
 
@@ -16,6 +17,7 @@ class ModbusServer(modbusServerEventListener: IModbusServerEventListener) {
     lateinit private var channel : ChannelFuture
     fun start(){
         try {
+            Configurator.initialize(null, "log4j2.xml")
             val b = ServerBootstrap()
             b.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel::class.java)
