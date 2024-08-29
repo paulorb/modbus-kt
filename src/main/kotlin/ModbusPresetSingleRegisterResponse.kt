@@ -34,11 +34,11 @@ class ModbusPresetSingleRegisterResponse : ModbusPacket {
         protocolIdentifier = DEFAULT_PROTOCOL_IDENTIFIER.toShort()
         val addressBytes = DataConverter.toBytes(currentAddress.toShort())
         byteVector = ByteArray(LEN_BYTES_METADATA_SIZE)
-        byteVector[0] = addressBytes[0]
-        byteVector[1] = addressBytes[1]
+        byteVector[0] = addressBytes[1]
+        byteVector[1] = addressBytes[0]
         val valueBytes = DataConverter.toBytes(currentValue)
-        byteVector[2] = valueBytes[0]
-        byteVector[3] = valueBytes[1]
+        byteVector[2] = valueBytes[1]
+        byteVector[3] = valueBytes[0]
     }
 
     //TODO when implement the client remember to extend this class to also support decoding
