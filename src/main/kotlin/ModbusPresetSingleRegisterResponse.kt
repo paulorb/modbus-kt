@@ -30,7 +30,7 @@ class ModbusPresetSingleRegisterResponse : ModbusPacket {
 
 
     override fun encode() {
-        functionCode = ModbusPacket.FunctionCode.FORCE_SINGLE_COIL.value.toByte()
+        functionCode = ModbusPacket.FunctionCode.PRESET_SINGLE_REGISTER.value.toByte()
         protocolIdentifier = DEFAULT_PROTOCOL_IDENTIFIER.toShort()
         val addressBytes = DataConverter.toBytes(currentAddress.toShort())
         byteVector = ByteArray(LEN_BYTES_METADATA_SIZE)
