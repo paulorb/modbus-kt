@@ -44,7 +44,7 @@ class ModbusServerEventListenerReplyRandomNumbers : IModbusServerEventListener {
         return
     }
 
-    override fun presetSingleRegister(address: Int, value: Boolean) {
+    override fun presetSingleRegister(address: Int, value: Short) {
         return
     }
 

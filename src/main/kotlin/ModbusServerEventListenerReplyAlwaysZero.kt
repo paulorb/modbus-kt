@@ -24,9 +24,10 @@ class ModbusServerEventListenerReplyAlwaysZero: IModbusServerEventListener {
         return
     }
 
-    override fun presetSingleRegister(address: Int, value: Boolean) {
-       return
+    override fun presetSingleRegister(address: Int, value: Short) {
+        return
     }
+
 
     override fun forceMultipleCoils(addressValueList: MutableList<Pair<Int, Boolean>>) {
         return

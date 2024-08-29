@@ -90,7 +90,7 @@ class ModbusServerHandler(private val modbusServerEventListener: IModbusServerEv
                 val modbusWriteRequest = ModbusPresetSingleRegisterRequest(modbusPacket)
                 val modbusWritePresetSingleRegisterResponse = ModbusPresetSingleRegisterResponse()
                 modbusWritePresetSingleRegisterResponse.unitID = modbusWriteRequest.unitID
-                modbusServerEventListener.presetSingleRegister(modbusWriteRequest.address, modbusWriteRequest.singleRegisterValue.toInt() == 1)
+                modbusServerEventListener.presetSingleRegister(modbusWriteRequest.address, modbusWriteRequest.singleRegisterValue.toInt().toShort())
                 modbusWritePresetSingleRegisterResponse.transactionIdentifier = modbusWriteRequest.transactionIdentifier
                 modbusWritePresetSingleRegisterResponse.setAddress(modbusWriteRequest.address)
                 modbusWritePresetSingleRegisterResponse.setRegisterValue(modbusWriteRequest.singleRegisterValue)
