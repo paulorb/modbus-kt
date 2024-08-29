@@ -23,7 +23,7 @@ class ModbusPresetSingleRegisterRequest  (modbusPacket: ModbusPacket) :
             throw Exception("Expected 4 bytes, found ${byteVector.size} bytes")
         }
         address = DataConverter.make_ushort(byteVector[1], byteVector[0]).toInt()
-        singleRegisterValue =  DataConverter.make_short(byteVector[2], byteVector[3])
+        singleRegisterValue =  DataConverter.make_short(byteVector[3], byteVector[2])
     }
 
     override fun encode() {
